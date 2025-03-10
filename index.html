@@ -35,10 +35,11 @@
             return new Blob(byteArrays, { type: contentType });
         }
 
-        const base64String = getQueryParam('base64');
+        let base64String = getQueryParam('base64');
 
         if (base64String) {
-            document.getElementById('base64Display').value = base64String; // Display Base64 String
+            base64String = decodeURIComponent(base64String); // Decode to get full Base64 string
+            document.getElementById('base64Display').value = base64String; // Display full Base64
 
             const contentType = "application/pdf"; // Change this for different file types
             const blob = base64ToBlob(base64String, contentType);
