@@ -10,6 +10,8 @@
     <iframe id="fileFrame" width="100%" height="500px"></iframe>
     <br>
     <a id="downloadLink" style="display: none;" download="decoded_file">Download File</a>
+    <br>
+    <textarea id="base64Display" rows="10" cols="80" readonly></textarea>
 
     <script>
         function getQueryParam(name) {
@@ -36,6 +38,8 @@
         const base64String = getQueryParam('base64');
 
         if (base64String) {
+            document.getElementById('base64Display').value = base64String; // Display Base64 String
+
             const contentType = "application/pdf"; // Change this for different file types
             const blob = base64ToBlob(base64String, contentType);
             const blobUrl = URL.createObjectURL(blob);
