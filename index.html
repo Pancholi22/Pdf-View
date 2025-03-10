@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base64 to File Viewer</title>
+    <title>Base64 String Viewer</title>
 </head>
 <body>
-    <h2>Base64 File Viewer</h2>
-    <iframe id="fileFrame" width="100%" height="500px"></iframe>
-    <br>
-    <a id="downloadLink" style="display: none;" download="decoded_file">Download File</a>
-    <br>
+    <h2>Base64 Viewer</h2>
     <textarea id="base64Display" rows="10" cols="80" readonly></textarea>
 
     <script>
@@ -19,42 +15,13 @@
             return urlParams.get(name);
         }
 
-        function base64ToBlob(base64, contentType = '') {
-            const byteCharacters = atob(base64);
-            const byteArrays = [];
-
-            for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-                const slice = byteCharacters.slice(offset, offset + 512);
-                const byteNumbers = new Array(slice.length);
-                for (let i = 0; i < slice.length; i++) {
-                    byteNumbers[i] = slice.charCodeAt(i);
-                }
-                byteArrays.push(new Uint8Array(byteNumbers));
-            }
-
-            return new Blob(byteArrays, { type: contentType });
-        }
-
         let base64String = getQueryParam('base64');
 
         if (base64String) {
-            base64String = decodeURIComponent(base64String); // Decode to get full Base64 string
-            document.getElementById('base64Display').value = base64String; // Display full Base64
-
-            const contentType = "application/pdf"; // Change this for different file types
-            const blob = base64ToBlob(base64String, contentType);
-            const blobUrl = URL.createObjectURL(blob);
-
-            // Show in iframe if it's a PDF or image
-            const fileFrame = document.getElementById('fileFrame');
-            fileFrame.src = blobUrl;
-
-            // Set up download link
-            const downloadLink = document.getElementById('downloadLink');
-            downloadLink.href = blobUrl;
-            downloadLink.style.display = "block";
+            base64String = decodeURIComponent(base64String); // Decode in case of special characters
+            document.getElementById('base64Display').value = base64String; // Display as text
         } else {
-            alert("No base64 string provided in the URL.");
+            alert("No Base64 string provided in the URL.");
         }
     </script>
 </body>
